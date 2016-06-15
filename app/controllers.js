@@ -1,5 +1,5 @@
 (function() {
-	// 'use strict';
+	'use strict';
 
 	module.exports = function($rootScope, $scope, $window, Notification, ngDialog) {
 		$scope.troubleshootActions = [];
