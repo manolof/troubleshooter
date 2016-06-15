@@ -25,17 +25,6 @@ $v-accordion-spacing: 30px !default;
 $v-pane-expand-duration: 0.25s !default;
 $v-pane-hover-duration: 0.25s !default;
 
-@font-face {
-	font-family: 'open_sansregular';
-	src: url('../../fonts/OpenSans-Regular-webfont.eot');
-	src: url('../../fonts/OpenSans-Regular-webfont.eot?#iefix') format('embedded-opentype'),
-	url('../../fonts/OpenSans-Regular-webfont.woff') format('woff'),
-	url('../../fonts/OpenSans-Regular-webfont.ttf') format('truetype'),
-	url('../../fonts/OpenSans-Regular-webfont.svg#open_sansregular') format('svg');
-	font-weight: normal;
-	font-style: normal;
-}
-
 * {
 	@include box-sizing();
 }
@@ -237,88 +226,88 @@ input {
 /* Base styles
  ***************************************/
 
-//v-accordion {
-//	display: block;
-//	margin: $v-accordion-spacing 0;
-//}
-//
-//v-pane {
-//	display: block;
-//	@include transition(transform $v-pane-expand-duration);
-//
-//	> v-pane-header > div,
-//	> v-pane-content li a {
-//		display: block;
-//		font-size: 14px;
-//		padding: 12px 16px 12px 50px;
-//		color: $navigation-color;
-//		border-bottom: solid 1px $navigation-border-color;
-//		text-overflow: ellipsis;
-//		overflow: hidden;
-//		position: relative;
-//
-//		&, .leftNavIcon {
-//			line-height: 120%;
-//		}
-//
-//		.leftNavIcon {
-//			position: absolute;
-//			top: 0;
-//			left: 0;
-//			width: 50px;
-//			padding: 12px 0;
-//			text-align: center;
-//		}
-//
-//		@include transition(color 0.2s ease);
-//
-//		&:hover {
-//			color: $navigation-color-hover;
-//		}
-//	}
-//
-//	&.is-expanded {
-//		> v-pane-header > div {
-//			border-bottom-color: $navigation-border-color;
-//			background-color: $navigation-bg-active;
-//			color: $navigation-color-active;
-//		}
-//
-//		> v-pane-content > div {
-//			opacity: 1;
-//			@include transform(translate3d(0, 0, 0));
-//			visibility: visible;
-//		}
-//	}
-//}
-//
-//v-pane-header {
-//	display: block;
-//	position: relative;
-//	cursor: pointer;
-//	user-select: none;
-//	outline: none;
-//	@include transition(color $v-pane-hover-duration, border-color $v-pane-expand-duration);
-//}
-//
-//v-pane-content {
-//	display: block;
-//	position: relative;
-//	overflow: hidden;
-//	max-height: 0;
-//
-//	ul, li ul, li {
-//		list-style: none;
-//		padding: 0;
-//		margin: 0;
-//	}
-//
-//	> div {
-//		visibility: hidden;
-//		background-color: $navigation-sub-bg;
-//		will-change: transform, opacity;
-//		@include opacity(0);
-//		@include transform(translate3d(0, 30px, 0));
-//		@include transition(transform $v-pane-expand-duration, opacity $v-pane-expand-duration);
-//	}
-//}
+v-accordion {
+	display: block;
+	margin: $v-accordion-spacing 0;
+}
+
+v-pane {
+	display: block;
+	@include transition(transform $v-pane-expand-duration);
+
+	> v-pane-header > div,
+	> v-pane-content li a {
+		display: block;
+		font-size: 14px;
+		padding: 12px 16px 12px 50px;
+		color: $navigation-color;
+		border-bottom: solid 1px $navigation-border-color;
+		text-overflow: ellipsis;
+		overflow: hidden;
+		position: relative;
+
+		&, .leftNavIcon {
+			line-height: 120%;
+		}
+
+		.leftNavIcon {
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 50px;
+			padding: 12px 0;
+			text-align: center;
+		}
+
+		@include transition(color 0.2s ease);
+
+		&:hover {
+			color: $navigation-color-hover;
+		}
+	}
+
+	&.is-expanded {
+		> v-pane-header > div {
+			border-bottom-color: $navigation-border-color;
+			background-color: $navigation-bg-active;
+			color: $navigation-color-active;
+		}
+
+		> v-pane-content > div {
+			opacity: 1;
+			@include transform(translate3d(0, 0, 0));
+			visibility: visible;
+		}
+	}
+}
+
+v-pane-header {
+	display: block;
+	position: relative;
+	cursor: pointer;
+	user-select: none;
+	outline: none;
+	@include transition(color $v-pane-hover-duration, border-color $v-pane-expand-duration);
+}
+
+v-pane-content {
+	display: block;
+	position: relative;
+	overflow: hidden;
+	max-height: 0;
+
+	ul, li ul, li {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+	}
+
+	> div {
+		visibility: hidden;
+		background-color: $navigation-sub-bg;
+		will-change: transform, opacity;
+		@include opacity(0);
+		@include transform(translate3d(0, 30px, 0));
+		@include transition(transform $v-pane-expand-duration, opacity $v-pane-expand-duration);
+	}
+}
