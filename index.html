@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html ng-app="app">
+<head>
+	<title>Vertical navigation with jQuery Plugin</title>
+	<link href="dist/css/app.min.css" rel="stylesheet" type="text/css">
+	<link href="dist/css/plugins.min.css" rel="stylesheet" type="text/css">
+</head>
+<body ng-controller="mainController">
+
+<div id="contentWrapper">
+
+	<div id="contentLeft" class="vAccordion--default">
+
+		<v-accordion>
+
+			<v-pane ng-repeat="(parentIndex, item) in menuItems">
+				<v-pane-header>
+					<i class="fa leftNavIcon" ng-class="::item.icon"></i> {{::item.title}}
+				</v-pane-header>
+
+				<v-pane-content>
+					<ul>
+						<li ng-repeat="(index, subItem) in item.subItems" ng-switch on="isNotObject(subItem)">
+							<a href="javascript:void(0)" ng-switch-when="true" ng-click="addAction(parentIndex, index)" v-pressable>
+								<i class="fa fa-angle-right leftNavIcon"></i> {{::subItem}}
+							</a>
+							<a href="javascript:void(0)" ng-switch-when="false" ng-click="openModal(parentIndex, index)" v-pressable>
+								<i class="fa fa-angle-right leftNavIcon"></i> {{::subItem.title}}
+							</a>
+						</li>
+					</ul>
+				</v-pane-content>
+			</v-pane>
+
+		</v-accordion>
+
+	</div>
+
+	<div id="contentRight">
+
+		<h1 id="heading">Troubleshoot Actions</h1>
+
+		<p ng-show="!troubleshootActions.length"><em>
+			Please select an action from the left-hand side column, or add your own using the input below.
+		</em></p>
+
+		<div class="clear-container">
+			<a href="javascript:void(0)" class="button error" ng-click="removeAll()"
+			   ng-show="troubleshootActions.length" v-pressable>Clear all</a>
+		</div>
+		<div class="copy-to-clipboard-container" ng-show="troubleshootActions.length">
+			<textarea id="textarea" ng-model="troubleshootActionsString"></textarea>
+			<button class="button" ngclipboard data-clipboard-target="#textarea" v-pressable
+					ngclipboard-success="onSuccess(e);">Copy to clipboard
+			</button>
+		</div>
+
+		<form ng-submit="addAction()">
+			<div class="input-container">
+				<input type="text" ng-model="manualAction.input" size="30" placeholder="Task name">
+				<button type="submit" class="button alternative" ng-disabled="!manualAction.input.length" v-pressable>
+					<span>Add New</span>
+				</button>
+			</div>
+		</form>
+
+		<ul>
+			<li ng-repeat="(index, action) in troubleshootActions" ng-show="troubleshootActions.length">
+				{{::action.item}}
+				<span ng-show="action.subItem.length">- {{::action.subItem}}</span>
+				<span ng-show="action.customValue.length">- {{::action.customValue}}</span>
+
+				<a href="javascript:void(0)" class="remove-action" ng-click="removeAction(index)">
+					<i class="fa fa-trash-o" title="Remove"></i>
+				</a>
+			</li>
+		</ul>
+	</div>
+
+</div>
+
+<script type="text/ng-template" id="templateId">
+
+	<h1 ng-if="dialogContent.title">{{::dialogContent.title}}</h1>
+
+	<p ng-if="dialogContent.prompt">{{::dialogContent.prompt}}</p>
+
+	<form name="form1" ng-show="dialogContent.type === 'input'" class="clearfix">
+		<div ng-repeat="field in dialogContent.fields track by $index" class="inline left">
+			<input type="text" size="6" name="myInput" ng-model="manualActionCustom.inputMultiple[$index]" required> {{::field}} <span ng-if="!$last">{{dialogContent.divider}}</span>
+		</div>
+		<button type="submit" class="button alternative right clear" ng-disabled="form1.$invalid"
+				ng-click="addAction(dialogContent.parent, dialogContent.subItem); closeThisDialog(); manualActionCustom.inputMultiple = {}"
+				v-pressable>
+			<span>Add New</span>
+		</button>
+
+	</form>
+
+	<form name="form2" ng-show="dialogContent.type === 'radio'" class="clearfix">
+		<div ng-repeat="option in dialogContent.options" class="inline left">
+			<label>
+				<input type="radio" ng-model="manualActionCustom.input" name="options" value="{{::option}}" required>
+				{{::option}}
+			</label>
+		</div>
+		<button type="submit" class="button alternative right clear" ng-disabled="form2.$invalid"
+				ng-click="addAction(dialogContent.parent, dialogContent.subItem); closeThisDialog(); manualActionCustom.input = ''"
+				v-pressable>
+			<span>Add New</span>
+		</button>
+	</form>
+
+</script>
+
+<script src="dist/js/plugins.min.js"></script>
+<script src="dist/js/app.min.js"></script>
+<script id="__bs_script__">//<![CDATA[
+document.write("<script async src='http://HOST:55999/browser-sync/browser-sync-client.2.13.0.js'><\/script>".replace("HOST", location.hostname));
+//]]></script>
+</body>
+</html>

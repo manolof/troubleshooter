@@ -1,0 +1,324 @@
+@import "mixins";
+
+$body-bg: #FFF;
+$font-color: #666;
+
+$primary-color: #17232F;
+
+$content-left-bg: lighten($primary-color, 10%);
+$content-left-width: 250px;
+
+$navigation-color: #CCC;
+$navigation-color-hover: #FFF;
+
+$navigation-bg-active: #427C97;
+$navigation-color-active: #FFF;
+
+$navigation-border-color: lighten($content-left-bg, 10%);
+$navigation-icon-color-hover: $navigation-bg-active;
+
+$navigation-sub-bg: $primary-color;
+$navigation-sub-border-color: lighten($navigation-sub-bg, 7%);
+$navigation-sub-color-active: #FFF;
+
+$v-accordion-spacing: 30px !default;
+$v-pane-expand-duration: 0.25s !default;
+$v-pane-hover-duration: 0.25s !default;
+
+@font-face {
+	font-family: 'open_sansregular';
+	src: url('../../fonts/OpenSans-Regular-webfont.eot');
+	src: url('../../fonts/OpenSans-Regular-webfont.eot?#iefix') format('embedded-opentype'),
+	url('../../fonts/OpenSans-Regular-webfont.woff') format('woff'),
+	url('../../fonts/OpenSans-Regular-webfont.ttf') format('truetype'),
+	url('../../fonts/OpenSans-Regular-webfont.svg#open_sansregular') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+
+* {
+	@include box-sizing();
+}
+
+body {
+	background-color: $body-bg;
+	color: $font-color;
+	font-family: "open_sansregular", sans-serif;
+	padding: 0;
+	margin: 0;
+}
+
+a {
+	text-decoration: none;
+}
+
+h1 {
+	margin-top: 0;
+}
+
+button, input, optgroup, select, textarea {
+	color: inherit;
+	font: inherit;
+	margin: 0;
+}
+
+.button {
+	display: inline-block;
+	zoom: 1;
+	line-height: normal;
+	white-space: nowrap;
+	vertical-align: middle;
+	text-align: center;
+	cursor: pointer;
+	-webkit-user-drag: none;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	font-family: inherit;
+	font-size: 100%;
+	padding: 8px 15px;
+	border: 0 rgba(0, 0, 0, 0);
+	background-color: $content-left-bg;
+	text-decoration: none;
+	@include border-radius(2px);
+	color: $navigation-color-active;
+	text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+
+	&:hover,
+	&:focus {
+		@include linear-gradient('bottom', rgba(0, 0, 0, 0), rgba(0, 0, 0, .05) 40%, rgba(0, 0, 0, .1));
+	}
+
+	&:active {
+		-webkit-box-shadow: 0 0 0 1px rgba(0, 0, 0, .15) inset, 0 0 6px rgba(0, 0, 0, .2) inset;
+		-moz-box-shadow: 0 0 0 1px rgba(0, 0, 0, .15) inset, 0 0 6px rgba(0, 0, 0, .2) inset;
+		box-shadow: 0 0 0 1px rgba(0, 0, 0, .15) inset, 0 0 6px rgba(0, 0, 0, .2) inset;
+		border-color: #000 \9
+	;
+	}
+
+	&:disabled {
+		border: 0;
+		background-image: none;
+		@include opacity(.4);
+		cursor: not-allowed;
+		box-shadow: none;
+	}
+
+	&.error {
+		background: #CA3C3C;
+	}
+
+	&.alternative {
+		background: $navigation-bg-active;
+	}
+}
+
+input {
+	line-height: normal;
+	padding: calculateRem(8) calculateRem(10);
+	display: inline-block;
+	border: 1px solid $navigation-color;
+	@include box-shadow(0, 1px, 3px, lighten($navigation-color, 5%), 'inset');
+	@include border-radius(4px);
+	vertical-align: middle;
+}
+
+.inline {
+	display: inline;
+	margin-right: calculateRem(15);
+	margin-bottom: calculateRem(15);
+}
+
+.right {
+	float: right;
+}
+
+.left {
+	float: left;
+}
+
+.clear {
+	clear: both;;
+}
+
+.clearfix {
+	@extend %clearfix;
+}
+
+#contentWrapper {
+	width: 100%;
+	height: 100%;
+	position: relative;
+
+	#contentLeft {
+		z-index: 10;
+		width: $content-left-width;
+		height: 100%;
+		position: fixed;
+		top: 0;
+		left: 0;
+		background-color: $content-left-bg;
+	}
+
+	#contentRight {
+		padding: 20px 30px;
+		margin-left: $content-left-width;
+		max-width: 800px;
+
+		form {
+			@extend %clearfix;
+		}
+
+		.clear-container,
+		.copy-to-clipboard-container {
+			float: left;
+		}
+
+		.copy-to-clipboard-container {
+			margin: 0 5px;
+		}
+
+		.input-container {
+			float: right;
+		}
+
+		ul {
+			border: 1px solid $navigation-color;
+			border-bottom-width: 2px;
+			padding: 0 10px 0 40px;
+
+			li {
+				border-bottom: 1px solid $navigation-color;
+				padding: 8px 10px;
+
+				&:last-child {
+					border-bottom: none;
+				}
+			}
+		}
+
+		.remove-action {
+			color: $content-left-bg;
+			margin-left: 15px;
+			float: right;
+		}
+
+		.copy-to-clipboard-container {
+			position: relative;
+			overflow: hidden;
+
+			#textarea {
+				@include absolute-full('', -9999px);
+				width: 0;
+				height: 0;
+			}
+
+			button {
+				z-index: 2;
+			}
+		}
+	}
+}
+
+.ui-notification {
+	background: $navigation-bg-active !important;
+}
+
+/**
+ * vAccordion - AngularJS multi-level accordion component
+ * @version v1.4.1
+ * @link http://lukaszwatroba.github.io/v-accordion
+ * @author ?ukasz W?troba <l@lukaszwatroba.com>
+ * @license MIT License, http://www.opensource.org/licenses/MIT
+ */
+
+/* Base styles
+ ***************************************/
+
+//v-accordion {
+//	display: block;
+//	margin: $v-accordion-spacing 0;
+//}
+//
+//v-pane {
+//	display: block;
+//	@include transition(transform $v-pane-expand-duration);
+//
+//	> v-pane-header > div,
+//	> v-pane-content li a {
+//		display: block;
+//		font-size: 14px;
+//		padding: 12px 16px 12px 50px;
+//		color: $navigation-color;
+//		border-bottom: solid 1px $navigation-border-color;
+//		text-overflow: ellipsis;
+//		overflow: hidden;
+//		position: relative;
+//
+//		&, .leftNavIcon {
+//			line-height: 120%;
+//		}
+//
+//		.leftNavIcon {
+//			position: absolute;
+//			top: 0;
+//			left: 0;
+//			width: 50px;
+//			padding: 12px 0;
+//			text-align: center;
+//		}
+//
+//		@include transition(color 0.2s ease);
+//
+//		&:hover {
+//			color: $navigation-color-hover;
+//		}
+//	}
+//
+//	&.is-expanded {
+//		> v-pane-header > div {
+//			border-bottom-color: $navigation-border-color;
+//			background-color: $navigation-bg-active;
+//			color: $navigation-color-active;
+//		}
+//
+//		> v-pane-content > div {
+//			opacity: 1;
+//			@include transform(translate3d(0, 0, 0));
+//			visibility: visible;
+//		}
+//	}
+//}
+//
+//v-pane-header {
+//	display: block;
+//	position: relative;
+//	cursor: pointer;
+//	user-select: none;
+//	outline: none;
+//	@include transition(color $v-pane-hover-duration, border-color $v-pane-expand-duration);
+//}
+//
+//v-pane-content {
+//	display: block;
+//	position: relative;
+//	overflow: hidden;
+//	max-height: 0;
+//
+//	ul, li ul, li {
+//		list-style: none;
+//		padding: 0;
+//		margin: 0;
+//	}
+//
+//	> div {
+//		visibility: hidden;
+//		background-color: $navigation-sub-bg;
+//		will-change: transform, opacity;
+//		@include opacity(0);
+//		@include transform(translate3d(0, 30px, 0));
+//		@include transition(transform $v-pane-expand-duration, opacity $v-pane-expand-duration);
+//	}
+//}

@@ -1,0 +1,310 @@
+// ==========================================================================
+// Base – Mixins
+// ==========================================================================
+
+@function calculateRem($size) {
+	$remSize: $size / 16;
+	@return $remSize * 1rem;
+}
+
+@function calculateEm($size) {
+	@return ($size / $base-font-size) * 1em;
+}
+
+@function strip-unit($number) {
+	@if type-of($number) == 'number' and not unitless($number) {
+		@return $number / ($number * 0 + 1);
+	}
+
+	@return $number;
+}
+
+// Restrict a value with min & max
+@function clamp($value, $min, $max) {
+	@return if($value > $max, $max, if($value < $min, $min, $value));
+}
+
+%clearfix {
+	&:before,
+	&:after {
+		content: " ";
+		display: table;
+	}
+
+	&:after {
+		clear: both;
+	}
+}
+
+@mixin font-size($size) {
+	font-size: calculateEm($size);
+}
+
+@mixin line-height($size) {
+	line-height: $size + px;
+	line-height: calculateRem($size);
+}
+
+// Background Size
+// Examply usage .background-size(cover);
+@mixin background-size($size: cover) {
+	-webkit-background-size: $size;
+	-moz-background-size: $size;
+	-o-background-size: $size;
+	background-size: $size;
+}
+
+// Border Radius
+// Example usage .border-radius(2px) || .border-radius(100%);
+@mixin border-radius($radius) {
+	-webkit-border-radius: $radius;
+	-moz-border-radius: $radius;
+	-ms-border-radius: $radius;
+	border-radius: $radius;
+}
+
+// BOX SIZING
+@mixin box-sizing($type: border-box) {
+	-webkit-box-sizing: $type;
+	-moz-box-sizing: $type;
+	box-sizing: $type;
+}
+
+// BOX SHADOW
+@mixin box-shadow($x: 2px, $y: 2px, $blur: 5px, $color: rgba(0,0,0,.4), $inset: "") {
+	@if ($inset != "") {
+		-webkit-box-shadow: $inset $x $y $blur $color;
+		-moz-box-shadow: $inset $x $y $blur $color;
+		box-shadow: $inset $x $y $blur $color;
+	} @else {
+		-webkit-box-shadow: $x $y $blur $color;
+		-moz-box-shadow: $x $y $blur $color;
+		box-shadow: $x $y $blur $color;
+	}
+}
+
+// Rotate (Transformation)
+// Example usage .rotate(180) || .rotate(-45);
+@mixin rotate($rotate) {
+	-ms-transform: rotate($rotate + deg);
+	-webkit-transform: rotate($rotate + deg);
+	transform: rotate($rotate + deg);
+}
+
+// SVG background with PNG fallback
+// Example Usage .svg-bg("img/banner.svg", "img/banner.png", #00314d, 50% 50%, no-repeat);
+@mixin bg-svg($image, $color: transparent, $position: 0 0, $repeat: no-repeat) {
+	background-image: url("../img/#{$image}.svg");
+	background-color: $color;
+	background-position: $position;
+	background-repeat: $repeat;
+	.no-svg & {
+		background-image: url("../img/#{$image}.png");
+	}
+}
+
+// Background Color with Opacity
+// Example Usage: .bg-rgba(#111, 50%);
+@mixin bg-rgba($color, $alpha) {
+	$opacity: $alpha / 100%;
+	$rgba: rgba($color, $opacity);
+	background: $color;
+	background: rgba($color, $opacity);
+}
+
+// Opacity
+// Example Usage: .opacity(.5);
+@mixin opacity($opacity: 0.5) {
+	filter: alpha(opacity=($opacity * 100));
+	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=" + ($opacity * 100) + ")";
+	-moz-opacity: $opacity;
+	-khtml-opacity: $opacity;
+	opacity: $opacity;
+}
+
+// Animations
+// Example Usage .animation(1s);
+@mixin animate($duration: 1s) {
+	-webkit-animation-duration: $duration;
+	animation-duration: $duration;
+	-webkit-animation-fill-mode: both;
+	animation-fill-mode: both;
+}
+
+// Animation Delay
+// Example Usage .animation-delay(1s)
+@mixin animate-delay($delay: 1s) {
+	-webkit-animation-delay: $delay;
+	animation-delay: $delay;
+}
+
+// CSS Transitions
+// Example Usage .transition(width, height 0.3s ease-in-out);
+@function unfoldTransition ($transition) {
+	// Default values
+	$property: all;
+	$duration: .2s;
+	$easing: null; // Browser default is ease, which is what we want
+	$delay: null; // Browser default is 0, which is what we want
+	$defaultProperties: ($property, $duration, $easing, $delay);
+
+	// Grab transition properties if they exist
+	$unfoldedTransition: ();
+	@for $i from 1 through length($defaultProperties) {
+		$p: null;
+		@if $i <= length($transition) {
+			$p: nth($transition, $i)
+		} @else {
+			$p: nth($defaultProperties, $i)
+		}
+		$unfoldedTransition: append($unfoldedTransition, $p);
+	}
+
+	@return $unfoldedTransition;
+}
+
+@mixin transition($transitions...) {
+	$unfoldedTransitions: ();
+	@each $transition in $transitions {
+		$unfoldedTransitions: append($unfoldedTransitions, unfoldTransition($transition), comma);
+	}
+
+	-webkit-transition: $unfoldedTransitions;
+	transition: $unfoldedTransitions;
+}
+
+// Transition Delay
+// Example usage .transition-delay(.3s)
+@mixin transition-delay($speed: 0.3s) {
+	-webkit-transition-delay: $speed;
+	-moz-transition-delay: $speed;
+	transition-delay: $speed;
+}
+
+// generic transform
+@mixin transform($transforms) {
+	-webkit-transform: $transforms;
+	-moz-transform: $transforms;
+	transform: $transforms;
+}
+
+// Vertical align anything
+//! Has to be applied to a container
+@mixin vertical-align($position: relative) {
+	position: $position;
+	top: 50%;
+	-webkit-transform: translateY(-50%);
+	-ms-transform: translateY(-50%);
+	transform: translateY(-50%);
+}
+
+@mixin absolute-full($t: '', $l: '', $r: '', $b: '') {
+	position: absolute;
+	@if ($t != "") {
+		top: $t;
+	}
+	@if ($l != "") {
+		left: $l;
+	}
+	@if ($r != "") {
+		right: $r;
+	}
+	@if ($b != "") {
+		bottom: $b;
+	}
+}
+
+@function inverse-side($side) {
+	@if $side == top {
+		@return bottom;
+	} @else if $side == bottom {
+		@return top;
+	} @else if $side == left {
+		@return right;
+	}
+	@return left;
+}
+
+// Creates a linear gradient background and provides a fallback color.
+//
+// $angle    - The direction of the linear gradient.
+// $color-1  - The first color stop, e.g. `#fff` or `#fff 20%`.
+// $color-2  - The second color stop.
+// $color-3  - The third color stop (optional).
+// $color-4  - The forth color stop (optional).
+// $color-5  - The fifth color stop (optional).
+//
+// Compatible in IE9+, Firefox 3.6+, Chrome, Safari 4+, Opera 11.1+.
+@mixin linear-gradient($angle, $color-1, $color-2: null, $color-3: null, $color-4: null, $color-5: null) {
+	// If $angle is missing from mixin, reassign vars and add default angle.
+	@if type-of($angle) == color {
+		$color-5: $color-4;
+		$color-4: $color-3;
+		$color-3: $color-2;
+		$color-2: $color-1;
+		$color-1: $angle;
+		$angle: to bottom;
+	}
+	$angle-old: inverse-side($angle);
+	$angle-svg: "";
+	@if $angle-old == top {
+		$angle-svg: ' x2="0%" y2="100%"';
+	} @else if $angle-old == right {
+		$angle-svg: ' x2="100%"';
+	} @else if $angle-old == bottom {
+		$angle-svg: ' x2="0" y1="100%"';
+	}
+
+	$offset-1-svg: 0%;
+	@if length($color-1) > 1 {
+		$offset-1-svg: nth($color-1, 2);
+	}
+	$offset-2-svg: 100%;
+	@if length($color-2) > 1 {
+		$offset-2-svg: nth($color-2, 2);
+	}
+	$offset-3-svg: 100%;
+	$offset-4-svg: 100%;
+	$offset-5-svg: 100%;
+	$full-svg: "<stop style=\"stop-color:#{opacify(nth($color-1, 1), 1)};stop-opacity:#{opacity(nth($color-1, 1))}\" offset=\"#{$offset-1-svg}\"/><stop style=\"stop-color:#{opacify(nth($color-2, 1), 1)};stop-opacity:#{opacity(nth($color-2, 1))}\" offset=\"#{$offset-2-svg}\"/>";
+
+	@if $color-3 != null {
+		@if length($color-3) > 1 {
+			$offset-3-svg: nth($color-3, 2);
+		}
+		$full-svg: $full-svg + "<stop style=\"stop-color:#{opacify(nth($color-3, 1), 1)};stop-opacity:#{opacity(nth($color-3, 1))}\" offset=\"#{$offset-3-svg}\"/>";
+	}
+	@if $color-4 != null {
+		@if length($color-4) > 1 {
+			$offset-4-svg: nth($color-4, 2);
+		}
+		$full-svg: $full-svg + "<stop style=\"stop-color:#{opacify(nth($color-4, 1), 1)};stop-opacity:#{opacity(nth($color-4, 1))}\" offset=\"#{$offset-4-svg}\"/>";
+	}
+	@if $color-5 != null {
+		@if length($color-5) > 1 {
+			$offset-5-svg: nth($color-5, 2);
+		}
+		$full-svg: $full-svg + "<stop style=\"stop-color:#{opacify(nth($color-5, 1), 1)};stop-opacity:#{opacity(nth($color-5, 1))}\" offset=\"#{$offset-5-svg}\"/>";
+	}
+
+	$full: $color-1, $color-2, $color-3, $color-4, $color-5;
+
+	background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="G"#{$angle-svg}>#{$full-svg}</linearGradient></defs><rect width="100%" height="100%" fill="url(#G)"/></svg>');
+	background-image: -webkit-linear-gradient(#{$full});
+	background-image: -moz-linear-gradient(#{$angle-old}, #{$full});
+	background-image: -o-linear-gradient(#{$full});
+	background-image: unquote("linear-gradient(#{$full})");
+}
+
+// Breakpoints
+@mixin breakpoint($point) {
+	@media only screen and (min-width: $point) {
+		@content;
+	}
+}
+
+@mixin breakpoint-max($point) {
+	@media only screen and (max-width: ($point - 1)) {
+		@content;
+	}
+}
